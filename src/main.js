@@ -1,72 +1,88 @@
-'use strict';
+"use strict";
 
-let products = [];
+const products = [];
 
-// to add a new product
+const getElementById = (id) => document.getElementById(id);
+
+const createProduct = (name, price) => ({ name, price });
+
 const addProduct = () => {
-    const name = document.getElementById('productName').value;
-    const price = parseFloat(document.getElementById('productPrice').value);
-    
-    if (!name || isNaN(price) || price <= 0) {
-        alert("Please enter a valid product name and price.");
-        return;
-    }
+  const name = getElementById("productName").value;
+  const price = parseFloat(getElementById("productPrice").value);
 
-    products = [...products, { name, price }];
-    updateProductList();
+  if (!name || isNaN(price) || price <= 0) {
+    alert("Please enter a valid product name and price.");
+    return;
+  }
+
+  products.push(createProduct(name, price));
+  renderProductList(products);
 };
 
-// apply a discount to all products
+// Функція вищого порядку для застосування знижки до продукту
+const applyDiscountToProduct = (discount) => (product) => ({
+  ...product,
+  discountedPrice: product.price * (1 - discount / 100),
+});
+
+// Застосовує знижку до всіх продуктів, використовуючи функціональний підхід
 const applyDiscount = () => {
-    const discount = parseFloat(document.getElementById('discount').value);
-    if (isNaN(discount) || discount < 0 || discount > 100) {
-        alert("Please enter a valid discount percentage (0-100).");
-        return;
-    }
+  const discount = parseFloat(getElementById("discount").value);
 
-    // products with discounted price
-    products = products.map(product => ({
-        ...product,
-        discountedPrice: product.price * (1 - discount / 100),
-    }));
+  if (isNaN(discount) || discount < 0 || discount > 100) {
+    alert("Please enter a valid discount percentage (0-100).");
+    return;
+  }
 
-    updateProductList();
+  const discountedProducts = products.map(applyDiscountToProduct(discount));
+  renderProductList(discountedProducts);
 };
 
-// set a new price for all products
+// Функція вищого порядку для встановлення нової ціни з можливим застосуванням знижки
+const setPriceForProduct =
+  (newPrice, discount = 0) =>
+  (product) => ({
+    ...product,
+    price: newPrice,
+    discountedPrice: newPrice * (1 - discount / 100),
+  });
+
+// Встановлює нову ціну для всіх продуктів, зберігаючи функціональність чистою
 const setNewPrice = () => {
-    const newPrice = parseFloat(document.getElementById('newPrice').value);
-    if (isNaN(newPrice) || newPrice <= 0) {
-        alert("Please enter a valid new price.");
-        return;
-    }
+  const newPrice = parseFloat(getElementById("newPrice").value);
+  const discount = parseFloat(getElementById("discount").value) || 0;
 
-    // all products with the new price
-    products = products.map(product => ({
-        ...product,
-        price: newPrice,
-        discountedPrice: newPrice * (1 - (parseFloat(document.getElementById('discount').value) || 0) / 100)
-    }));
+  if (isNaN(newPrice) || newPrice <= 0) {
+    alert("Please enter a valid new price.");
+    return;
+  }
 
-    updateProductList();
+  const updatedProducts = products.map(setPriceForProduct(newPrice, discount));
+  renderProductList(updatedProducts);
 };
 
-// to update the HTML list of products
-const updateProductList = () => {
-    const productList = document.getElementById('productList');
-    productList.innerHTML = '';
+// Відображає оновлений список продуктів у HTML
+const renderProductList = (productListData = products) => {
+  const productList = getElementById("productList");
+  productList.innerHTML = "";
 
-    products.forEach(product => {
-        const li = document.createElement('li');
-        li.textContent = `Name:${product.name} - Original price: $${product.price.toFixed(2)}, ` +
-                         `Price with discount: $${(product.discountedPrice || product.price).toFixed(2)}`;
-        productList.appendChild(li);
-    });
+  // Створення масиву HTML-елементів для кожного продукту
+  const productItems = productListData.map((product) => {
+    const li = document.createElement("li");
+    li.textContent =
+      `Name: ${product.name} - Original price: $${product.price.toFixed(2)}, ` +
+      `Price with discount: $${(
+        product.discountedPrice || product.price
+      ).toFixed(2)}`;
+    return li;
+  });
+
+  // Додавання елементів до DOM
+  productItems.forEach((li) => productList.appendChild(li));
 };
 
-// to clear all products
+// Очищає список продуктів
 const clearProducts = () => {
-    products = []; 
-    updateProductList();
+  products.length = 0;
+  renderProductList(products);
 };
-

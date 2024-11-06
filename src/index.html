@@ -1,37 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <title>Product discount app</title>
-    <link rel="stylesheet" href="style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-</head>
-<body>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
     <h1>Product discount application</h1>
-    
+
     <div>
-        <label for="productName">Product name:</label>
-        <input type="text" id="productName">
-        
-        <label for="productPrice">Product price:</label>
-        <input type="number" id="productPrice">
-        
-        <button onclick="addProduct()">Add new product</button>
-        <button onclick="clearProducts()">Clear all products</button> 
+      <label for="productName">Product name:</label>
+      <input type="text" id="productName" />
+
+      <label for="productPrice">Product price ($):</label>
+      <input type="number" id="productPrice" />
+
+      <button onclick="addProduct()">Add new product</button>
+      <button onclick="clearProducts()">Clear all products</button>
     </div>
 
     <div>
-        <label for="discount">Discount (%):</label>
-        <input type="number" id="discount" oninput="applyDiscount()">
+      <label for="discount">Discount (%):</label>
+      <input type="number" id="discount" oninput="applyDiscount()" />
     </div>
 
     <div>
-        <label for="newPrice">Set new price for all products:</label>
-        <input type="number" id="newPrice" oninput="setNewPrice()">
+      <label for="newPrice">Set new price for all products:</label>
+      <input type="number" id="newPrice" oninput="setNewPrice()" />
     </div>
 
     <h2>Product list</h2>
     <ul id="productList"></ul>
 
     <script src="main.js"></script>
-</body>
+  </body>
 </html>
