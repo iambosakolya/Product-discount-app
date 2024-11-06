@@ -2,7 +2,7 @@
 
 let products = [];
 
-// add a new product
+// to add a new product
 const addProduct = () => {
     const name = document.getElementById('productName').value;
     const price = parseFloat(document.getElementById('productPrice').value);
@@ -51,15 +51,22 @@ const setNewPrice = () => {
     updateProductList();
 };
 
-// update the HTML list of products
+// to update the HTML list of products
 const updateProductList = () => {
     const productList = document.getElementById('productList');
-    productList.innerHTML = ''; 
+    productList.innerHTML = '';
 
     products.forEach(product => {
         const li = document.createElement('li');
-        li.textContent = `${product.name} - Original price: $${product.price.toFixed(2)}, ` +
+        li.textContent = `Name:${product.name} - Original price: $${product.price.toFixed(2)}, ` +
                          `Price with discount: $${(product.discountedPrice || product.price).toFixed(2)}`;
         productList.appendChild(li);
     });
 };
+
+// to clear all products
+const clearProducts = () => {
+    products = []; 
+    updateProductList();
+};
+
